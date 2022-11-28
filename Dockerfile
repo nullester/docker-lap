@@ -3,16 +3,18 @@
 ARG UID=1000
 ARG GID=1000
 ARG RELEASE=8.1
+ARG MAINTAINER="nullester"
 
-FROM nullester/ubuntu:latest as builder
+FROM ${MAINTAINER}/ubuntu:latest as builder
 
 ARG UID
 ARG GID
 ARG RELEASE
-
+ARG MAINTAINER
 ARG PHP_VERS=${RELEASE:-8.1}
 
-LABEL maintainer="nullester"
+RUN echo "Maintainer is \033[032m${MAINTAINER}\033[0m"
+LABEL maintainer="${MAINTAINER}"
 
 ENV	DEBCONF_NONINTERACTIVE_SEEN="true" \
 	DEBIAN_FRONTEND="noninteractive" \
