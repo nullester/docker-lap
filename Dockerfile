@@ -89,6 +89,7 @@ RUN echo '#!/bin/bash' > /usr/local/bin/php-release-version && \
 FROM build4 as build5
 RUN chown -R www-data:www-data /var/www/html
 RUN usermod -a -G www-data docker
+RUN usermod -a -G docker www-data
 
 # Apache2 confs
 FROM build5 as build6
