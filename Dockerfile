@@ -67,29 +67,39 @@ FROM build2 as build3
 COPY install-composer.sh /usr/src/app/install-composer.sh
 RUN cd /usr/src/app && chmod +x install-composer.sh && sh install-composer.sh && rm install-composer.sh
 
-# Users and permissions
+# Helpers
 FROM build3 as build4
+RUN echo '#!/bin/bash' > /usr/local/bin/php-version && \
+    echo -n "php -r 'echo PHP_MAJOR_VERSION." >> /usr/local/bin/php-version && \
+    echo -n '"' >> /usr/local/bin/php-version && \
+    echo -n '.' >> /usr/local/bin/php-version && \
+    echo -n '"' >> /usr/local/bin/php-version && \
+    echo ".PHP_MINOR_VERSION;'" >> /usr/local/bin/php-version && \
+    chmod +x /usr/local/bin/php-version
+
+# Users and permissions
+FROM build4 as build5
 RUN chown -R www-data:www-data /var/www/html
 RUN usermod -a -G www-data docker
 
 # Apache2 confs
-FROM build4 as build5
+FROM build5 as build6
 RUN a2enmod php$PHP_VERS proxy_fcgi ssl rewrite expires headers
 RUN a2enconf php$PHP_VERS-fpm
 
 # Prepare entrypoint
-FROM build5 as build6
+FROM build6 as build7
 COPY entrypoint.sh /entry/lap
 RUN chmod +x /entry/lap
 
 # Expose ports
-FROM build6 as build7
+FROM build7 as build8
 EXPOSE 80 443
 
 # Set volumes
-FROM build7 as build8
+FROM build8 as build9
 VOLUME \
     ["/var/www/html"]
 
-# FROM build8
+# FROM build9
 # ENTRYPOINT ["/entry/lap"]
