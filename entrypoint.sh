@@ -1,3 +1,7 @@
 #!/bin/bash
 
-apachectl -D FOREGROUND
+if [[ "$USER" != "root" ]]; then
+    sudo apachectl -D FOREGROUND
+else
+    apachectl -D FOREGROUND
+fi
