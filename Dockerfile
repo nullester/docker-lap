@@ -69,13 +69,21 @@ RUN cd /usr/src/app && chmod +x install-composer.sh && sh install-composer.sh &&
 
 # Helpers
 FROM build3 as build4
-RUN echo '#!/bin/bash' > /usr/local/bin/php-version && \
-    echo -n "php -r 'echo PHP_MAJOR_VERSION." >> /usr/local/bin/php-version && \
-    echo -n '"' >> /usr/local/bin/php-version && \
-    echo -n '.' >> /usr/local/bin/php-version && \
-    echo -n '"' >> /usr/local/bin/php-version && \
-    echo ".PHP_MINOR_VERSION;'" >> /usr/local/bin/php-version && \
-    chmod +x /usr/local/bin/php-version
+RUN echo '#!/bin/bash' > /usr/local/bin/php-major-version && \
+    echo -n "php -r 'echo PHP_MAJOR_VERSION;'" >> /usr/local/bin/php-major-version && \
+    chmod +x /usr/local/bin/php-major-version
+RUN echo '#!/bin/bash' > /usr/local/bin/php-minor-version && \
+    echo -n "php -r 'echo PHP_MAJOR_VERSION." >> /usr/local/bin/php-minor-version && \
+    echo -n '"."' >> /usr/local/bin/php-minor-version && \
+    echo ".PHP_MINOR_VERSION;'" >> /usr/local/bin/php-minor-version && \
+    chmod +x /usr/local/bin/php-minor-version
+RUN echo '#!/bin/bash' > /usr/local/bin/php-release-version && \
+    echo -n "php -r 'echo PHP_MAJOR_VERSION." >> /usr/local/bin/php-release-version && \
+    echo -n '"."' >> /usr/local/bin/php-release-version && \
+    echo -n ".PHP_MINOR_VERSION." >> /usr/local/bin/php-release-version && \
+    echo -n '"."' >> /usr/local/bin/php-release-version && \
+    echo ".PHP_RELEASE_VERSION;'" >> /usr/local/bin/php-release-version && \
+    chmod +x /usr/local/bin/php-release-version
 
 # Users and permissions
 FROM build4 as build5
