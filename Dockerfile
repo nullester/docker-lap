@@ -60,7 +60,7 @@ RUN	apt-get -y install \
     apache2 \
     mysql-client \
     ssmtp mailutils \
-    php$PHP_VERS php$PHP_VERS-fpm libapache2-mod-php$PHP_VERS php-pear \
+    php$PHP_VERS php$PHP_VERS-fpm libapache2-mod-php$PHP_VERS \
     php$PHP_VERS-mysql php$PHP_VERS-gd php$PHP_VERS-zip php$PHP_VERS-mbstring php$PHP_VERS-xml php$PHP_VERS-intl php$PHP_VERS-curl
 
 # Composer
