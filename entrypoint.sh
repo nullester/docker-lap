@@ -19,7 +19,6 @@ if [[ "$USER" != "root" ]]; then
 else
     service php$PHP_VERS-fpm start
 fi
-echo -e "\033[032mphp${PHP_VERS}-fpm\033[0m started"
 echo
 
 echo -e -n "Server \033[032m${HOSTNAME}\033[0m up and running!"
