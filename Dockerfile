@@ -91,6 +91,8 @@ FROM build4 as build5
 RUN chown -R www-data:www-data /var/www/html
 RUN usermod -a -G www-data docker
 RUN usermod -a -G docker www-data
+RUN echo "export APACHE_RUN_USER=docker" >> /etc/apache2/envvars
+RUN echo "export APACHE_RUN_GROUP=docker" >> /etc/apache2/envvars
 
 # Apache2 confs
 FROM build5 as build6

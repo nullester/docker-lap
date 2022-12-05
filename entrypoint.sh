@@ -21,5 +21,5 @@ else
 fi
 echo
 
-echo -e -n "Server \033[032m${HOSTNAME}\033[0m up and running!"
+echo -e "Server \033[032m${HOSTNAME}\033[0m up and running!"
 tail -f /dev/null
