@@ -66,7 +66,10 @@ RUN	apt-get -y install \
 # Composer
 FROM build2 as build3
 COPY install-composer.sh /usr/src/app/install-composer.sh
-RUN cd /usr/src/app && chmod +x install-composer.sh && sh install-composer.sh && rm install-composer.sh
+RUN cd /usr/src/app && \
+    chmod +x install-composer.sh && \
+    sh install-composer.sh && \
+    rm install-composer.sh
 
 # Helpers
 FROM build3 as build4
@@ -99,19 +102,27 @@ FROM build5 as build6
 RUN a2enmod php$PHP_VERS proxy_fcgi ssl rewrite expires headers
 RUN a2enconf php$PHP_VERS-fpm
 
-# Prepare entrypoint
+# nodejs
 FROM build6 as build7
+COPY install-nodejs.sh /usr/src/app/install-nodejs.sh
+RUN cd /usr/src/app && \
+    chmod +x install-nodejs.sh && \
+    bash install-nodejs.sh docker && \
+    rm install-nodejs.sh
+
+# Prepare entrypoint
+FROM build7 as build8
 COPY entrypoint.sh /entry/lap
 RUN chmod +x /entry/lap
 
 # Expose ports
-FROM build7 as build8
+FROM build8 as build9
 EXPOSE 80 443
 
 # Set volumes
-FROM build8 as build9
+FROM build9 as build10
 VOLUME \
     ["/var/www/html"]
 
-# FROM build9
+# FROM build10
 # ENTRYPOINT ["/entry/lap"]
