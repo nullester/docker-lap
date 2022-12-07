@@ -2,9 +2,6 @@
 
 echo && echo -e "\033[032mI AM \033[035m$( whoami )\033[032m!\033[0m" && echo
 
-su root -c "export HOME=/root"
-su docker -c "export HOME=/home/docker"
-
 echo -e "Starting service \033[032mapache2\033[0m"
 if [[ "$USER" != "root" ]]; then
     sudo service apache2 start
