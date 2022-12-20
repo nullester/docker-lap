@@ -62,6 +62,13 @@ RUN	apt-get -y install \
     ssmtp mailutils \
     php$PHP_VERS php$PHP_VERS-fpm libapache2-mod-php$PHP_VERS \
     php$PHP_VERS-mysql php$PHP_VERS-gd php$PHP_VERS-zip php$PHP_VERS-mbstring php$PHP_VERS-xml php$PHP_VERS-intl php$PHP_VERS-curl
+# Adding image optimizers
+RUN apt-get -y install \
+    jpegoptim \
+    optipng \
+    pngquant \
+    gifsicle \
+    webp
 
 # Composer
 FROM build2 as build3
