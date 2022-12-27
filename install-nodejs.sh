@@ -24,7 +24,7 @@ su $FOR_USER -p -c "echo && \
     echo -e \"PATH: \033[032m\$PATH\033[0m\" && \
     if [ ! -d \"\$NVM_DIR\" ]; then mkdir -p \"\$NVM_DIR\"; fi && \
     echo && \
-    curl --silent -o- https://raw.githubusercontent.com/creationix/nvm/v0.39.2/install.sh | bash && \
+    curl --silent -o- https://raw.githubusercontent.com/creationix/nvm/v0.39.3/install.sh | bash && \
     [ -s \"\$NVM_DIR/nvm.sh\" ] && \. \"\$NVM_DIR/nvm.sh\" && \
     [ -s \"\$NVM_DIR/bash_completion\" ] && \. \"\$NVM_DIR/bash_completion\" && \
     echo && \
