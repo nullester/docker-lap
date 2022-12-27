@@ -2,7 +2,7 @@
 
 ARG UID=1000
 ARG GID=1000
-ARG RELEASE=8.1
+ARG RELEASE=8.2
 ARG MAINTAINER="nullester"
 
 FROM ${MAINTAINER}/ubuntu:latest as builder
@@ -11,7 +11,7 @@ ARG UID
 ARG GID
 ARG RELEASE
 ARG MAINTAINER
-ARG PHP_VERS=${RELEASE:-8.1}
+ARG PHP_VERS=${RELEASE:-8.2}
 
 RUN echo "Maintainer is \033[032m${MAINTAINER}\033[0m"
 LABEL maintainer="${MAINTAINER}"
@@ -98,11 +98,15 @@ RUN echo '#!/bin/bash' > /usr/local/bin/php-release-version && \
 
 # Users and permissions
 FROM build4 as build5
-RUN chown -R www-data:www-data /var/www/html
+RUN chown -R docker:docker /var/www/html
 RUN usermod -a -G www-data docker
 RUN usermod -a -G docker www-data
-RUN echo "export APACHE_RUN_USER=docker" >> /etc/apache2/envvars
-RUN echo "export APACHE_RUN_GROUP=docker" >> /etc/apache2/envvars
+RUN if [ -f /etc/apache2/envvars ]; then sed -Ezi 's/export\ APACHE_RUN_USER=www\-data/export\ APACHE_RUN_USER=docker/' /etc/apache2/envvars; fi
+RUN if [ -f /etc/apache2/envvars ]; then sed -Ezi 's/export\ APACHE_RUN_GROUP=www\-data/export\ APACHE_RUN_GROUP=docker/' /etc/apache2/envvars; fi
+RUN if [ -f /etc/php/$PHP_VERS/fpm/pool.d/www.conf ]; then sed -Ezi 's/\nuser\ =\ www\-data\n/\nuser\ =\ docker\n/' /etc/php/$PHP_VERS/fpm/pool.d/www.conf; fi
+RUN if [ -f /etc/php/$PHP_VERS/fpm/pool.d/www.conf ]; then sed -Ezi 's/\ngroup\ =\ www\-data\n/\ngroup\ =\ docker\n/' /etc/php/$PHP_VERS/fpm/pool.d/www.conf; fi
+RUN if [ -f /etc/php/$PHP_VERS/fpm/pool.d/www.conf ]; then sed -Ezi 's/\nlisten\.owner\ =\ www\-data\n/\nlisten\.owner\ =\ docker\n/' /etc/php/$PHP_VERS/fpm/pool.d/www.conf; fi
+RUN if [ -f /etc/php/$PHP_VERS/fpm/pool.d/www.conf ]; then sed -Ezi 's/\nlisten\.group\ =\ www\-data\n/\nlisten\.group\ =\ docker\n/' /etc/php/$PHP_VERS/fpm/pool.d/www.conf; fi
 
 # Apache2 confs
 FROM build5 as build6
